@@ -1,0 +1,42 @@
+# Logs
+logs
+*.log
+
+# Runtime data
+*.seed
+
+# Coverage directory used by tools like istanbul
+coverage
+
+# Compiled binary addons (http://nodejs.org/api/addons.html)
+build/Release
+.eslintcache
+
+# Dependency directory
+# https://www.npmjs.org/doc/misc/npm-faq.html#should-i-check-my-node_modules-folder-into-git
+node_modules
+
+# OSX
+.DS_Store
+
+# flow-typed
+flow-typed
+
+# App packaged
+dist/.*
+.babelrc
+configs/*
+dist
+flow-typed/module_vx.x.x.js
+git/.*
+test/*
+
+
+.idea
+npm-debug.log.*
+__snapshots__
+
+# Package.json
+package.json
+.travis.yml
+
