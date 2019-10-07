@@ -13,7 +13,6 @@ export default function writersBlockRootReducer(
   action: Action
 )
 {
-  console.log('AM I BEING HIT',state,action)
   return {
     Blockstack: BlockstackReducer(state, action),
     Journal: JournalReducer(state, action),

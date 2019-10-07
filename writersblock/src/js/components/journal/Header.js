@@ -47,8 +47,8 @@ const Header = () =>
           textTransform:'uppercase'
         }),
         JournalUserActions = withStyle(JournalHeaderDate, {
-          backgroundColor: USE_GAIA ? '#e5e5e5' : 'none',
-          borderRadius: USE_GAIA ? '50%' : 0,
+          // backgroundColor: USE_GAIA ? '#e5e5e5' : 'none',
+          // borderRadius: USE_GAIA ? '50%' : 0,
           cursor:'pointer',
           display:'inline-block',
           float:'right',
@@ -70,7 +70,11 @@ const Header = () =>
             color:'#16264c'
           }
         }),
-        UserAvater = <FontAwesomeIcon onClick={blockstackLogout}  icon='book-reader'/>,
+        UserLogoutWrapper = styled('div', {
+          backgroundColor:'transparent',
+          border:'unset'
+        }),
+        UserAvater = <UserLogoutWrapper onClick={blockstackLogout}><FontAwesomeIcon  icon='book-reader'/> Logout</UserLogoutWrapper>,
         UserLogin = <UserLoginWrapper onClick={blockstackSignIn}>Sign In <FontAwesomeIcon style={{ fontSize: '1.25rem' }} icon='file-signature' /></UserLoginWrapper>
         
   const currentDay = `${new Date().getMonth()+1} / ${new Date().getDate()} / ${new Date().getFullYear()}`

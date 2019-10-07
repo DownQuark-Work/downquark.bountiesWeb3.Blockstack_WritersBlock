@@ -4,6 +4,7 @@ import React, {Fragment, useContext, useState} from 'react'
 import { styled } from 'styletron-react'
 import {USE_GAIA} from '../../utils/blockstack'
 
+import {WritersBlockContext} from '../../base/Root'
 import {JournalContext} from './context'
 import {useJournalContent, useJournalContentMouseLeave} from './context/hooks'
 
@@ -12,8 +13,9 @@ import * as Decorator from './decorators'
 const ContentRender = (props:JournalContentPropsType, ref) =>
 {
   const {classMaps, content, wysiwygVisible} = props,
-        {journalStore, journalDispatch} = useContext(JournalContext),
-        journalContentString = useJournalContent(content, classMaps, wysiwygVisible) //do local checks within this hook
+        {writersBlockStore, writersBlockDispatch} = useContext(WritersBlockContext),
+        {journalStore, journalDispatch} = useContext(JournalContext)
+        let journalContentString = useJournalContent(journalStore.original.content, classMaps, wysiwygVisible) //do local checks within this hook
   
   const JournalContent = styled('div', {minHeight:'55vh'}),
         JournalContentMarkup = () => ({__html: journalContentString})
@@ -54,20 +56,32 @@ const ContentRender = (props:JournalContentPropsType, ref) =>
   }
   const handleFocus = (e) =>
   {
+    //clear initial default content on click
+  if(!journalStore.currentDayFileExists)
+  { journalStore.original.content = '' }
+  
     journalStore.journalDOM = ref
     props.toggleWysiwyg(true)
   }
+  const isEditable = () =>
+  {
+    return USE_GAIA 
+              && (journalStore.currentDayFileExists && journalStore.currentDayFileExists.noExt() === journalStore.fileName.current)
+              || !journalStore.currentDayFileExists
+  }
 
   return (
-    <JournalContent
-      className="journal-daily-content"
-      contentEditable={USE_GAIA}
-      dangerouslySetInnerHTML={JournalContentMarkup()}
-      onMouseLeave={handleMouseLeave}
-      onFocus={USE_GAIA ? handleFocus : null}
-      ref={ref}
-      suppressContentEditableWarning
-    />
+    <>
+      <JournalContent
+        className="journal-daily-content"
+        contentEditable={isEditable()}
+        dangerouslySetInnerHTML={JournalContentMarkup()}
+        onMouseLeave={handleMouseLeave}
+        onFocus={isEditable() ? handleFocus : null}
+        ref={ref}
+        suppressContentEditableWarning
+      />
+    </>
   )
 }
 const Content:$FlowES6Bug = React.forwardRef(ContentRender)

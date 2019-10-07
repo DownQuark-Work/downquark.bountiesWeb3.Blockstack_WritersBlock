@@ -7,12 +7,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {createContextConstants} from '../../../utils/context'
 import {WysiwygConstantsEnum, WysiwygConstantsKey} from '../context/constants'
 
-const HighLightDrawerComponent = (classMap:ObjOfArrayStr, setHighlightedFormat:$FlowTesting) =>
+const HighLightDrawerComponent = (classMap:ObjOfArrayStr, setHighlightedFormat:$FlowCurrentBranch) =>
 {
   const curSelection = window.getSelection(),
         highlightArray = Object.keys(classMap).filter(itm => !!~itm.indexOf('highlight-'))
 
-console.log('curSelection',{...curSelection})
+// console.log('curSelection',{...curSelection})
 const clonedSelect = curSelection ? {
   begin:{
     element:curSelection.anchorNode,
@@ -45,7 +45,7 @@ const selectionRef = useRef(clonedSelect)
         }),
         HighlightComponents = highlightArray.map((itm) =>
         {
-          const getHighlightInformation = (elm:$FlowTesting) =>
+          const getHighlightInformation = (elm:$FlowCurrentBranch) =>
           {
             const applyTag =`<mark data-wysiwyg-class-map="${elm.currentTarget.getAttribute('datahighlightclassmap')}" class="${elm.currentTarget.getAttribute('datahighlightclass')}">`
             setHighlightedFormat('HIGHLIGHT', applyTag, selectionRef.current)

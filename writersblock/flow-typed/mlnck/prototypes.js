@@ -4,6 +4,7 @@ declare class Date extends Date {
   getFullCalendarDates:(Date) => {epoch:number[],numbered:number[]},
   getMonthsOfYear:boolArrayStringFncType,
   getTitleFormattedDate:emptyStringFncType,
+  getContentFileFormattedDate:emptyStringFncType,
   getNamedDay:(number,boolean) => string,
   getNamedMonth:(number,boolean) => string,
   getRandomDate:(?number,?number) => Date

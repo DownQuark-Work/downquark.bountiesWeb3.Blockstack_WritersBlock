@@ -1,11 +1,19 @@
-import React from 'react'
+import React, {useContext, useEffect, useRef, useState} from 'react'
 import { styled,withStyle } from 'styletron-react'
 
 import { TabletPlusCorners } from  '../../context/constants/app/journal'
 import { MediaQuery } from  '../../context/constants/app/common'
 
+import {WritersBlockContext} from '../../base/Root'
+import {JournalContext} from '../journal/context'
+
+import {navigateJournalContent} from './context/actions'
+
 const Footer = () =>
 {
+  const {writersBlockStore, writersBlockDispatch} = useContext(WritersBlockContext)
+  const {journalStore, journalDispatch} = useContext(JournalContext)
+  
   const JournalFooter = styled('footer', {
           paddingTop: '1em',
           [MediaQuery.TABLET_PLUS]: {
@@ -41,11 +49,34 @@ const Footer = () =>
         }),
         JournalFooterNext = withStyle(JournalFooterPrev, { textAlign:'right' })
 
-  return (
+const clonedPosts = [...writersBlockStore.Blockstack.userFiles.privatePosts],
+      footerNavData = clonedPosts.sort().filter((itm, indx, arr) => {return arr.indexOf(itm) === indx})
+
+let [footerPointer, setFooterPointer] = useState(footerNavData.length-1)
+useEffect(()=>
+{
+  if(journalStore.currentDayFileExists)
+  {
+    footerNavData.forEach((itm,indx) => 
+    { if(journalStore.currentDayFileExists === itm){ setFooterPointer(indx); } })
+  }
+},[footerNavData, footerPointer, journalStore.currentDayFileExists])
+
+  const navigateContent = (i) =>
+  {
+    footerPointer += i
+    
+    const entryFile = footerNavData[footerPointer],
+          block = { userSession:writersBlockStore.Blockstack.userSession, dispatch:writersBlockDispatch },
+          journal = {dispatch:journalDispatch, currentDayFileExists:entryFile}
+    navigateJournalContent(block, journal, entryFile)
+  }
+  
+  return footerNavData.length > 1 && (
     <JournalFooter>
       <JournalFooterNav>
-        <JournalFooterPrev>↤</JournalFooterPrev>
-        <JournalFooterNext>↦</JournalFooterNext>
+        {footerPointer > 0 && <JournalFooterPrev onClick={() => navigateContent(-1)}>↤</JournalFooterPrev>}
+        {footerPointer < footerNavData.length - 1 && <JournalFooterNext onClick={() => navigateContent(1)}>↦</JournalFooterNext>}
       </JournalFooterNav>
     </JournalFooter>
   )

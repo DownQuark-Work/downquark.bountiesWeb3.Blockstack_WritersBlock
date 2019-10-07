@@ -73,7 +73,7 @@ const Wysiwyg = (props:WysiwygPropsType) =>
         },
     setCustomDrawerComponentFormat = (type: string, openingTag: string, sel: { begin: { element: any, index: number }, end: { element: any, index: number }, txt: { range: number, selectedTxt: string, overwriteText?:string, overwriteClass?:string[]}}) =>
         {
-          console.log('setCustomDrawerComponentFormat type',type)
+          // console.log('setCustomDrawerComponentFormat type',type)
           const REPLACE_TAG_CLOSE = 'zx_REPLACE_TAG_CLOSE_xz',
                 REPLACE_TAG_OPEN = 'zx_REPLACE_TAG_OPEN_xz',
                 REPLACE_TAG_SPLIT = 'zx_REPLACE_TAG_SPLIT_xz'

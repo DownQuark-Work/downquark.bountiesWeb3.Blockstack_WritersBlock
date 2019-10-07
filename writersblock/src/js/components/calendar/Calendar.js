@@ -16,12 +16,11 @@ const Calendar = () =>
   const calendarUrl = `${api.url.BASE}${api.url.CALENDAR}`,
         [calendarContent, setCalendarContent] = useState({content:[], loading:true})
 
-  // TODO: UPDATE - replace with BlockStack
-    //And real query if needed
+  // TODO: PHASE2 - handle calendar saves
   const receiveFetchedData = <FetchCalendarContentCallbackDataType>(o:FetchCalendarContentCallbackDataType) =>
   { setCalendarContent({...o}) }
   useEffect(() =>
-  {
+  {   //Phase 2 functionality stub
     ActionFetch({
       callback:receiveFetchedData,
       extended:{loading: false},
@@ -29,9 +28,9 @@ const Calendar = () =>
       url:calendarUrl,
     })
   }, [calendarUrl])
-  //I think turning off the calendar and re-working the 
+  {/* //I think turning off the calendar and re-working the 
   //skeuomorph to include more options is the way to go
-  //for mobile
+  //for mobile */}
   const [activeMonth, setActiveMonth] = useState(new Date().getMonth())
   const [activeYear, setActiveYear] = useState(new Date().getYear())
 

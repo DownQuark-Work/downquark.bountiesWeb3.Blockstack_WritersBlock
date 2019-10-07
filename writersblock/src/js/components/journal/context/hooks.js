@@ -45,51 +45,22 @@ export const useJournalContentMouseLeave = (curContent:string, origContent:strin
   return newContent
 }
 
-export const useWysiwygConfig = (curConfig:$FlowTesting) =>
+export const useWysiwygConfig = (curConfig:$FlowCurrentBranch) =>
 {
-  // console.log('This function will return what buttons in the Wysiwyg are (de)activated')
-  console.log('This function will be used to allow user interactions for extended wysiwyg funtionality')
-  console.log('This will be activated by BaseWysiwyg.js when the useEffect function has been created successfully');
-    // pick the highlighter color
-    // allow strikethrough additional text
-      /// etc
+  // This function will return what buttons in the Wysiwyg are (de)activated
+    // This function will be used to allow user interactions for extended wysiwyg funtionality
+    // This will be activated by BaseWysiwyg.js when the useEffect function has been created successfully
+      // pick the highlighter color
+      // allow strikethrough additional text
+        /// etc
   const [wysiwygConfig, setWysiwygConfig] = useState(null);
 
   useEffect(() =>
     {
-      console.log('curConfig',curConfig)
       curConfig && setWysiwygConfig(curConfig);
     },
     [curConfig]
   )
 
-  // // useDebugValue(WysiwygConfig);
   return wysiwygConfig;
 }
-
-
-//Generic Hook Info
-    //https://reactjs.org/docs/hooks-faq.html#how-to-read-an-often-changing-value-from-usecallback
-    /*
-      If the new state is computed using the previous state, you can pass a function to setState.
-      - const [count, setCount] = useState(initialCount)
-      - <button onClick={() => setCount(prevCount => prevCount + 1)}>+</button>
-    */
-    //https://reactjs.org/docs/hooks-reference.html#usedebugvalue
-    //https://reactjs.org/docs/hooks-reference.html#usememo
-      /* useCallback(fn, deps) is equivalent to useMemo(() => fn, deps) */
-    //https://reactjs.org/docs/hooks-reference.html#lazy-initial-state
-    //https://reactjs.org/docs/hooks-reference.html#cleaning-up-an-effect
-    //https://reactjs.org/docs/hooks-effect.html#tip-optimizing-performance-by-skipping-effects
-    //https://reactjs.org/docs/hooks-reference.html#timing-of-effects
-      //https://reactjs.org/docs/hooks-reference.html#uselayouteffect
-
-  //Custom Hook Creation Info
-    //https://reactjs.org/docs/hooks-custom.html#extracting-a-custom-hook
-    /* we can call useState and useEffect many times in one component, and they will be completely independent. */
-      //https://reactjs.org/docs/hooks-state.html#tip-using-multiple-state-variables
-      //https://reactjs.org/docs/hooks-effect.html#tip-use-multiple-effects-to-separate-concerns
-    //https://reactjs.org/docs/hooks-custom.html#tip-pass-information-between-hooks
-
-  //Error \ Debug
-    //https://reactjs.org/warnings/invalid-hook-call-warning.html

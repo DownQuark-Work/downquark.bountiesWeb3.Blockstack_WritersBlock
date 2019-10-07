@@ -3,14 +3,13 @@ import {WysiwygConstantsEnum} from '../../js/components/journal/context/constant
 export type WysiwygContextConstantsType = $Keys<typeof WysiwygConstantsEnum>
 export type WysiwygControlsDrawerMouseEventType = {
   displayDrawer?:boolean,
-  drawerComponent?:$FlowTesting,
+  drawerComponent?:$FlowCurrentBranch,
   message:string,
 }
 
 export type WysiwygPropsType = {|
   classMaps:RefObjOfArrayStr,
   removeWysiwyg: (false) => void, // TODO: [@mlnck] UPDATE ~ Is this still relevant?
-  setFormat:(WysiwygContextConstantsType) => void // TODO: [@mlnck] UPDATE ~ Is this still relevant?
 |}
 
 type baseWysiwygCssType = {
@@ -33,13 +32,13 @@ export type WysiwygDecoratorExtendedPropsType = {
 export type WysiwygControlsDrawerPropsType = {
   classMap:ObjOfArrayStr,
   msg:string,
-  customDrawerComponent?:$FlowTesting,
-  setCustomDrawerComponentFormat:$FlowTesting, //(any) => void,
+  customDrawerComponent?:$FlowCurrentBranch,
+  setCustomDrawerComponentFormat:$FlowCurrentBranch, //(any) => void,
   // selectionComponent?:React$Node,
   textInputLabel?:string, // TODO: [@mlnck] REMOVE ~ Using the component - this should no longer be needed
 }
 export type WysiwygDefaultFormatType = {
-  customDrawerComponent?:$FlowTesting,
+  customDrawerComponent?:$FlowCurrentBranch,
   displayDrawer:boolean,
   msg:string
 }

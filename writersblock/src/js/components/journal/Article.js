@@ -5,20 +5,23 @@ import React, {useCallback, useContext, useEffect, useState} from 'react'
 import { styled } from 'styletron-react'
 import { USE_GAIA } from '../../utils/blockstack'
 
-
-import {api, MediaQuery} from '../../context/constants/app/common'
-import {ActionFetch} from '../../context/actions'
-import JournalContentMock from '../../../mocks/journal'
+import { WritersBlockContext } from '../../base/Root'
 
 import {JournalContext} from './context'
-import {JOURNAL_LOAD_CONTENT_SUCCESS, JOURNAL_UNSAVED_UPDATE} from './context/constants'
+import {JOURNAL_LOAD_CONTENT_SUCCESS} from './context/constants'
+
+import {api, MediaQuery} from '../../context/constants/app/common'
+import {loadJournalContent} from './context/actions'
 
 import JournalPageLeft from './PageLeft'
 import JournalPageRight from './PageRight'
 
+import {landingPageContent, loggedInDefaultContent} from './context/index'
+
 const Article = (props:JournalBasePropsType) =>
 {
-  const {journalStore, journalDispatch} = useContext(JournalContext)
+  const { writersBlockStore, writersBlockDispatch } = useContext(WritersBlockContext),
+        {journalStore, journalDispatch} = useContext(JournalContext)
 
   const JournalArticle = styled('article', {
         //Below is FPO so I don't forget it exists. (makes graph paper)
@@ -37,6 +40,14 @@ const Article = (props:JournalBasePropsType) =>
 
   const createContentFromUserSettings = () =>
   {
+    if (!USE_GAIA) //User NOT logged in
+    { 
+      return {
+        ...baseDefaultContentObj,
+        content:landingPageContent,
+        title: 'why writers block?'
+      }
+    }
     const defaultJournalContentSetting = 'instructions',
           // defaultJournalContentSetting = context.user.journal.default
           defaultTitle = `${new Date().getTitleFormattedDate()} Journal Entry`,
@@ -56,53 +67,42 @@ const Article = (props:JournalBasePropsType) =>
       default:
         return {
           ...baseDefaultContentObj,
-          content:'This is your journal. To edit it just click anywhere',
+          content:loggedInDefaultContent
           }
-    }
-  }
-  
-  const initialJournalContent = {content:null, loading: true, loaded:false},
-        journalUrl =`${api.url.BASE}${api.url.JOURNAL}`
-
-  const receiveFetchedData = useCallback((o:FetchJournalContentCallbackDataType) =>
-  {
-    if(!(o.content && o.content.content.length))
-    { o.content = createContentFromUserSettings() }
-
-    journalDispatch({type:JOURNAL_LOAD_CONTENT_SUCCESS, payload:o})
-  },[journalDispatch])
-
-  const journalContentUserUpdate = (s:string) =>
-  {
-    const localStateTest = {
-      ...journalStore,
-      content: {
-        ...journalStore.content,
-        content:s,
-        updatedAt: new Date().getTimestamp()
-      }
     }
   }
 
   useEffect(() =>
   {
-    if(!journalStore.loaded)
+    if(!USE_GAIA)
+    { journalStore.original = {...journalStore.landing} }
+    else
     {
-      ActionFetch({
-        callback:receiveFetchedData,
-        extended:{loaded: true, loading: false},
-        mock:JournalContentMock,
-        url:journalUrl,
-      })
+      if(journalStore.currentDayFileExists === false)
+      {
+        const defaultData = createContentFromUserSettings()
+        journalStore.default = {...defaultData}
+        journalStore.original = {...defaultData}
+      }
     }
-  }, [journalUrl, journalStore.loaded, receiveFetchedData])
+  },[journalStore.currentDayFileExists, journalStore.default, journalStore.landing, journalStore.original])
+
+  useEffect(() =>
+  {
+    if (!journalStore.loaded)
+    {
+      const block = { userSession:writersBlockStore.Blockstack.userSession },
+            journal = {currentDayFileExists:journalStore.currentDayFileExists, dispatch:journalDispatch, filename:journalStore.fileName.current}
+      if(journalStore.currentDayFileExists != null) // base private and public files have been parsed
+      {loadJournalContent(block,journal)}
+    }
+  }, [journalStore.loaded, journalStore.currentDayFileExists, journalStore.fileName, writersBlockStore.Blockstack.userSession, journalDispatch])
 
   return (
     <JournalArticle>
       <JournalPageLeft title={journalStore.original.title} {...props} />
       <JournalPageRight
         content={journalStore.updatedContent || USE_GAIA && journalStore.original.content || journalStore.landing.content}
-        updateJournalContent={journalContentUserUpdate}
         {...props}
       />
     </JournalArticle>

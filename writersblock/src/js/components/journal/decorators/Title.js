@@ -7,8 +7,7 @@ import { DataUri } from  '../../../context/constants/app/journal'
 import { MediaQuery } from  '../../../context/constants/app/common'
 
 const Title = (props:{title:?string}) =>
-{  
-  console.log('titleprops',props)
+{
   const elementType = 'h2',
         breakBars = {
           borderColor: '#000',

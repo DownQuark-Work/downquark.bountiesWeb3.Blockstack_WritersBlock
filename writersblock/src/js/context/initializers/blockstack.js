@@ -1,6 +1,6 @@
 // import type { ContextInitializerJournalType } from '../../../flow/context/InitializersType'
 
-const blockstackContextInitial: $FlowDeadline = {
+const blockstackContextInitial: $FlowCurrentBranch = {
   appConfig:{},
   userSession:{},
   username:{},
@@ -22,6 +22,11 @@ const blockstackContextInitial: $FlowDeadline = {
   authResponseToken:{},
   hubUrl:{},
   gaiaAssociationToken:{},
+  userInformationPopulated:false,
+  userFiles:{
+    privatePosts:'',
+    publicPosts:''
+  }
 }
 export default blockstackContextInitial
 

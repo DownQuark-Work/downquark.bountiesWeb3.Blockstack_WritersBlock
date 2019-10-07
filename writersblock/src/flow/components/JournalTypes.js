@@ -1,13 +1,24 @@
 import type {WysiwygContextConstantsType} from './WysiwygTypes'
 
-export type ContextJournalConstantsType = 'writersblock.Journal.LOAD_CONTENT_FAILURE'
+export type ContextJournalConstantsType =   'writersblock.Journal.JOURNAL_NAVIGATE_ENTRIES_FAILURE'
+                                          | 'writersblock.Journal.JOURNAL_NAVIGATE_ENTRIES_INIT'
+                                          | 'writersblock.Journal.JOURNAL_NAVIGATE_ENTRIES_SUCCESS'
+                                          | 'writersblock.Journal.JOURNAL_SAVE_CONTENT_FAILURE'
+                                          | 'writersblock.Journal.JOURNAL_SAVE_CONTENT_INIT'
+                                          | 'writersblock.Journal.JOURNAL_SAVE_CONTENT_SUCCESS'
+                                          | 'writersblock.Journal.LOAD_CONTENT_FAILURE'
                                           | 'writersblock.Journal.LOAD_CONTENT_INIT'
                                           | 'writersblock.Journal.LOAD_CONTENT_SUCCESS'
                                           | 'writersblock.Journal.SET_PRE_BLUR_TEXT'
                                           | 'writersblock.Journal.SET_PRE_FOCUS_TEXT'
                                           | 'writersblock.Journal.SET_REDO_ACTIVE'
                                           | 'writersblock.Journal.SET_UNSAVED_UPDATE'
+
 export type ContextJournalStoreType = {|
+  fileName:{
+    dynamic?:string,
+    current:string
+  },
   landing?:{content?:string, title?:string},
   loaded:boolean,
   loading:boolean,

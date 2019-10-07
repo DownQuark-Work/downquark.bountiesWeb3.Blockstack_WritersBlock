@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {createContextConstants} from '../../../utils/context'
 import {WysiwygConstantsEnum, WysiwygConstantsKey} from '../context/constants'
 
-const LinkDrawerComponent = (classMap:ObjOfArrayStr, setStrikethroughFormat:$FlowTesting) =>
+const LinkDrawerComponent = (classMap:ObjOfArrayStr, setStrikethroughFormat:$FlowCurrentBranch) =>
 {
   const curSelection = window.getSelection(),
         clonedSelect = curSelection ? {
@@ -55,9 +55,9 @@ const LinkDrawerComponent = (classMap:ObjOfArrayStr, setStrikethroughFormat:$Flo
           marginRight:'.4rem',
           minWidth:'50%'
         }),
-        handleLinkTextUpdate = (elm:$FlowTesting) =>
+        handleLinkTextUpdate = (elm:$FlowCurrentBranch) =>
         { selectionRef.current.txt.linkText = elm.currentTarget.value },
-        getStrikethroughInformation = (elm:$FlowTesting) =>
+        getStrikethroughInformation = (elm:$FlowCurrentBranch) =>
         {
           const applyLinkText = selectionRef.current.txt.linkText.length ? selectionRef.current.txt.linkText : '#',
                 applyTag =`<a href="${applyLinkText}" target="_blank" data-wysiwyg-class-map="${elm.currentTarget.getAttribute('datahighlightclassmap')}" class="${elm.currentTarget.getAttribute('datahighlightclass')}">`

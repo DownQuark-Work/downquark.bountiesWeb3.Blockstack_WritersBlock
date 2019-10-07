@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {createContextConstants} from '../../../utils/context'
 import {WysiwygConstantsEnum, WysiwygConstantsKey} from '../context/constants'
 
-const StrikethroughDrawerComponent = (classMap:ObjOfArrayStr, setStrikethroughFormat:$FlowTesting) =>
+const StrikethroughDrawerComponent = (classMap:ObjOfArrayStr, setStrikethroughFormat:$FlowCurrentBranch) =>
 {
   const curSelection = window.getSelection(),
         clonedSelect = curSelection ? {
@@ -56,9 +56,9 @@ const StrikethroughDrawerComponent = (classMap:ObjOfArrayStr, setStrikethroughFo
           marginRight:'.4rem',
           minWidth:'50%'
         }),
-        handleOverwriteTextUpdate = (elm:$FlowTesting) =>
+        handleOverwriteTextUpdate = (elm:$FlowCurrentBranch) =>
         { selectionRef.current.txt.overwriteText = elm.currentTarget.value },
-        getStrikethroughInformation = (elm:$FlowTesting) =>
+        getStrikethroughInformation = (elm:$FlowCurrentBranch) =>
         {
           const applyTag =`<s data-wysiwyg-class-map="${elm.currentTarget.getAttribute('datahighlightclassmap')}" class="${elm.currentTarget.getAttribute('datahighlightclass')}">`
           if (selectionRef.current.txt.overwriteText.length)

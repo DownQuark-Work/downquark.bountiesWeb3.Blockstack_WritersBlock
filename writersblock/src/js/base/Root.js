@@ -20,18 +20,16 @@ export const WritersBlockContext: $FlowES6Bug = React.createContext(initialConte
 
 const Root = () => 
 {
-  const blockstackAppConfig = new AppConfig()
+  const blockstackAppConfig = new AppConfig(['store_write', 'publish_data'])
   const blockstackUserSession = new UserSession({ appConfig: blockstackAppConfig })
   //utlize javascripts pointers to capture config and sesson before store is populated and becomes immutable
-  //$FlowDeadline
+  //$FlowCurrentBranch
   initialContext.Blockstack.appConfig = blockstackAppConfig
-  //$FlowDeadline
+  //$FlowCurrentBranch
   initialContext.Blockstack.userSession = blockstackUserSession
   
 
   const [writersBlockStore, writersBlockDispatch] = useReducer(writersBlockRootReducer, initialContext)
-  
-  console.log('writersBlockStore',writersBlockStore)
 
   return (
     <WritersBlockContext.Provider value={{ writersBlockStore, writersBlockDispatch }}>

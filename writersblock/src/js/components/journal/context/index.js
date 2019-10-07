@@ -4,12 +4,33 @@ import type { ContextJournalConstantsType,
 import React, {useReducer} from 'react'
 import JournalReducer from './reducer'
 
-const landingPageContent = `<p data-wysiwyg-class-map="first-paragraph">Let's start with... because it's <b>free</b>, <i>easy</i> to use, and you even get access to <u>every single line</u> of code that powers it!<br>Just in case you want to verify that I'm not doing anything fishy with your data.</p>
+export const loggedInDefaultContent = `<p data-wysiwyg-class-map="paragraph"><b><u>CONGRATULATIONS!!</u></b></p>
+<p data-wysiwyg-class-map="paragraph"><br></p>
+<p data-wysiwyg-class-map="paragraph">You have successfully signed into <mark data-wysiwyg-class-map="highlight-pink">WRITERS BLOCK</mark>!</p>
+<p data-wysiwyg-class-map="paragraph"><br></p>
+<p data-wysiwyg-class-map="paragraph"><b><mark data-wysiwyg-class-map="highlight-yellow">tldr;</mark></b> There's a lot of good info about <mark data-wysiwyg-class-map="highlight-blue">WRITERS BLOCK</mark> below. But click anywhere on the paper to start <u><i>your</i></u> own writing!</p>
+<p data-wysiwyg-class-map="paragraph"><br></p>
+<hr><p data-wysiwyg-class-map="paragraph"><br></p>
+<p data-wysiwyg-class-map="paragraph">While this serves it's purpose for now <b><i>PLEASE</i></b>&nbsp;do <u>not</u>&nbsp;think that this is all there is planned.</p>
+<p data-wysiwyg-class-map="paragraph"><br></p>
+<p data-wysiwyg-class-map="paragraph">We all know what a great feeling it is to watch our own words appear on a <s data-wysiwyg-class-map="strike">blank piece of paper<sup data-wysiwyg-class-map="strike-replacement">monitor</sup></s> there is <mark data-wysiwyg-class-map="highlight-green">no</mark>&nbsp;denying that allowing others to view your creations brings with it another kind of <mark data-wysiwyg-class-map="highlight-orange"><i>magic</i></mark>.</p>
+<p data-wysiwyg-class-map="paragraph"><br></p>
+<p data-wysiwyg-class-map="paragraph">Together <b><i>WE</i></b> can make this much more than a daily writing application. If you can spare a few moments <a href="https://trello.com/b/XRLSPiD6/writersblock" target="_blank" data-wysiwyg-class-map="link">https://trello.com/b/XRLSPiD6/writersblockCHECK THIS OUT</a>! A roadmap has already been started, the ideas are just beginning, <i>and</i> I realize that you will have your own opinions too.</p>
+<p data-wysiwyg-class-map="paragraph"><br></p>
+<p data-wysiwyg-class-map="paragraph">Well... I <i>want</i>&nbsp;to hear them!</p>
+<p data-wysiwyg-class-map="paragraph"><br></p>
+<p data-wysiwyg-class-map="paragraph">The <i>"Community Voting for What's Next</i>&nbsp;card in Trello was created to make it easy to get your thoughts and ideas straight from <mark data-wysiwyg-class-map="highlight-blue">WRITERS BLOCK</mark>.</p>
+<p data-wysiwyg-class-map="paragraph"><br></p>
+<p data-wysiwyg-class-map="paragraph">Spread the word, enlist your <b>friends</b>, enlist your <i>enemies</i>. Let's make a writing application that everyone will enjoy, because <b><i><mark data-wysiwyg-class-map="highlight-orange">EVERYONE</mark></i></b> can have a hand in creating it!</p>
+<p data-wysiwyg-class-map="paragraph"><br></p>
+<p data-wysiwyg-class-map="paragraph">Thanks all!</p>`
+
+export const landingPageContent = `<p data-wysiwyg-class-map="first-paragraph">Let's start with... because it's <b>free</b>, <i>easy</i> to use, and you even get access to <u>every single line</u> of code that powers it!<br>Just in case you want to verify that I'm not doing anything fishy with your data.</p>
 
 <p><mark data-wysiwyg-class-map="highlight-pink">FEATURES</mark>:</p>
 <ul>
   <li><i><u><b>
-    Security</b></u></i> - <i>Writers Block</i> is distributed. What's that mean? Well it means that all of those people out there who want to break into a database and steal all of your secrets are just out of luck. <a href="https://github.com/blockstack/gaia" target="_blank" data-wysiwyg-class-map="link">Read more about Gaia</a>.<br><br>
+    Security</b></u></i> - <i>Writers Block</i> is distributed. What's that mean? Well it means that all of those people out there who want to break into a database and steal all of your secrets are just out of luck. <a href="https://github.com/blockstack/gaia" target="_blank" data-wysiwyg-class-map="link">Read more about Gaia</a>(&lt;- this is a clickable link).<br><br>
   </li><li><b><i><u>
     Honesty</u></i></b> - Honorable intent is so hard to find on the internet nowadays. You deserve to know what goes on behind the scenes with the code that you interact with on a daily basis. Well <a href="https://github.com/dq-mlnck/blockstack/tree/master/writersblock" target="_blank" data-wysiwyg-class-map="link">here it is</a>. Take a look around, be cautious or brazen, recreate it on your own computer. There's nothing stopping you... well, other than the fact you will miss out <a href="https://trello.com/b/XRLSPiD6/writersblock" target="_blank" data-wysiwyg-class-map="link">on all of this</a>!<br><br>
   </li><li><b><i><u>
@@ -43,10 +64,16 @@ Reach out and let me know what you think of the app. Both the good and the bad w
 And while you're at it, you can<mark data-wysiwyg-class-map="highlight-blue"> cast a vote</mark> for which upcoming feature will be developed next!</p>`
 
 export const JournalContextInitial:ContextJournalStoreType = {
-  landing:{content:landingPageContent,title:'why writers block?'},
+  fileName: {
+    current: ''
+  },
+  currentDayFileExists:null,
+  default: null,
+  landing:{content:landingPageContent,title:'DEPRECATED'},
   loaded:false,
   loading:true,
-  original:{content:'...', title:'Loading'},
+  meta:{created:null,lastupdated:null,totalupdates:0},
+  original:{content:'...', title:'Why Writers Block?'},
   unsavedUpdate:false,
 }
 
