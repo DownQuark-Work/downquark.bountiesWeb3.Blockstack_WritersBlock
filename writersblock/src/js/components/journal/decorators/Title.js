@@ -58,11 +58,10 @@ const Title = (props:{title:?string}) =>
           }
         }),
         WysiwygClassMap = `title`
-
-  const defaultTitle = USE_GAIA ? `${new Date().getTitleFormattedDate()} Journal Entry` : 'why writers block?'
+        
   return (
-    <JournalDecoratorTitle data-wysiwyg-class-map={WysiwygClassMap}>
-      {props.title || defaultTitle}
+    <JournalDecoratorTitle data-totalheight data-wysiwyg-class-map={WysiwygClassMap}>
+      {props.title}
     </JournalDecoratorTitle>
   )
 }

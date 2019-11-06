@@ -4,6 +4,7 @@ import type { ContextJournalConstantsType,
 import React, {useReducer} from 'react'
 import JournalReducer from './reducer'
 
+export const loggedInDefaultTitle = 'Welcome to Writers Block!'
 export const loggedInDefaultContent = `<p data-wysiwyg-class-map="paragraph"><b><u>CONGRATULATIONS!!</u></b></p>
 <p data-wysiwyg-class-map="paragraph"><br></p>
 <p data-wysiwyg-class-map="paragraph">You have successfully signed into <mark data-wysiwyg-class-map="highlight-pink">WRITERS BLOCK</mark>!</p>
@@ -13,9 +14,9 @@ export const loggedInDefaultContent = `<p data-wysiwyg-class-map="paragraph"><b>
 <hr><p data-wysiwyg-class-map="paragraph"><br></p>
 <p data-wysiwyg-class-map="paragraph">While this serves it's purpose for now <b><i>PLEASE</i></b>&nbsp;do <u>not</u>&nbsp;think that this is all there is planned.</p>
 <p data-wysiwyg-class-map="paragraph"><br></p>
-<p data-wysiwyg-class-map="paragraph">We all know what a great feeling it is to watch our own words appear on a <s data-wysiwyg-class-map="strike">blank piece of paper<sup data-wysiwyg-class-map="strike-replacement">monitor</sup></s> there is <mark data-wysiwyg-class-map="highlight-green">no</mark>&nbsp;denying that allowing others to view your creations brings with it another kind of <mark data-wysiwyg-class-map="highlight-orange"><i>magic</i></mark>.</p>
+<p data-wysiwyg-class-map="paragraph">Watching our own words appear on a <s data-wysiwyg-class-map="strike">blank piece of paper<sup data-wysiwyg-class-map="strike-replacement">monitor</sup></s> creates a feeling like no other. And there is <mark data-wysiwyg-class-map="highlight-green">no</mark>&nbsp;denying that allowing others to view your creations brings with it another kind of <mark data-wysiwyg-class-map="highlight-orange"><i>magic</i></mark>.</p>
 <p data-wysiwyg-class-map="paragraph"><br></p>
-<p data-wysiwyg-class-map="paragraph">Together <b><i>WE</i></b> can make this much more than a daily writing application. If you can spare a few moments <a href="https://trello.com/b/XRLSPiD6/writersblock" target="_blank" data-wysiwyg-class-map="link">https://trello.com/b/XRLSPiD6/writersblockCHECK THIS OUT</a>! A roadmap has already been started, the ideas are just beginning, <i>and</i> I realize that you will have your own opinions too.</p>
+<p data-wysiwyg-class-map="paragraph">Together <b><i>WE</i></b> can make this much more than a daily writing application. If you can spare a few moments <a href="https://trello.com/b/XRLSPiD6/writersblock" target="_blank" data-wysiwyg-class-map="link">CHECK THIS OUT</a>! A roadmap has already been started, the ideas are just beginning, <i>and</i> I realize that you will have your own opinions too.</p>
 <p data-wysiwyg-class-map="paragraph"><br></p>
 <p data-wysiwyg-class-map="paragraph">Well... I <i>want</i>&nbsp;to hear them!</p>
 <p data-wysiwyg-class-map="paragraph"><br></p>
@@ -25,6 +26,12 @@ export const loggedInDefaultContent = `<p data-wysiwyg-class-map="paragraph"><b>
 <p data-wysiwyg-class-map="paragraph"><br></p>
 <p data-wysiwyg-class-map="paragraph">Thanks all!</p>`
 
+export const loggedInInstructionsTitle = 'You\'re in! ... What should you do next?!'
+export const loggedInInstructionsContent = `<p data-wysiwyg-class-map="paragraph"><b><u>Great</u> Question!</b></p>
+<p data-wysiwyg-class-map="paragraph"><br></p>
+<p data-wysiwyg-class-map="paragraph">You have successfully signed into <mark data-wysiwyg-class-map="highlight-pink">WRITERS BLOCK</mark>!</p>`
+
+export const landingPageTitle = 'Why Writers Block?'
 export const landingPageContent = `<p data-wysiwyg-class-map="first-paragraph">Let's start with... because it's <b>free</b>, <i>easy</i> to use, and you even get access to <u>every single line</u> of code that powers it!<br>Just in case you want to verify that I'm not doing anything fishy with your data.</p>
 
 <p><mark data-wysiwyg-class-map="highlight-pink">FEATURES</mark>:</p>
@@ -63,17 +70,27 @@ export const landingPageContent = `<p data-wysiwyg-class-map="first-paragraph">L
 Reach out and let me know what you think of the app. Both the good and the bad will be greatly appreciated to help ensure the best experience for everyone involved.<br/>
 And while you're at it, you can<mark data-wysiwyg-class-map="highlight-blue"> cast a vote</mark> for which upcoming feature will be developed next!</p>`
 
+export const loadingPageTitle = 'Locating Your Journal'
+export const loadingPageContent = 'Why did we use the Dewey Decimal System for this?!'
+
 export const JournalContextInitial:ContextJournalStoreType = {
-  fileName: {
-    current: ''
+  journalEntry:{},
+  entryData: {
+    todaysDate: null,
+    todaysDateFile: null,
+    currentEntryDate:null,
+    currentEntryDateFile:null
   },
-  currentDayFileExists:null,
+  fileName: {
+    current: '' //this is the current day's fie
+  },
+  currentDayFileExists:null, // this is the current Day's file from navigation [string and false are valid values] null is ignored
   default: null,
-  landing:{content:landingPageContent,title:'DEPRECATED'},
+  landing: { content: landingPageContent, title: landingPageTitle}, // shown to logged in user with no content for the current day
   loaded:false,
   loading:true,
   meta:{created:null,lastupdated:null,totalupdates:0},
-  original:{content:'...', title:'Why Writers Block?'},
+  original:{content:'Flipping to today\'s page...', title:'Retrieving Your Journal'}, // only shown when user has saved content
   unsavedUpdate:false,
 }
 

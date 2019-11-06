@@ -10,9 +10,7 @@ export type ContextJournalType = {
 }
 
 export type ContextLandingType = {
-  cookiesAccept: boolean,
-  gdprAccept: boolean,
-  optIn?: boolean,
+  settingsOpen: boolean
 }
 
 export type ContextUserType = {

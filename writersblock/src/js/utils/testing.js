@@ -1,18 +1,33 @@
+export const IN_DEVELOPMENT = {
+  _global:true,
+  _groupByDefault:true,
+  base:true,
+  calendar:false,
+  journal:true,
+  postit:false,
+  reducer:false,
+  'root-reducer':true,
+  settings:false,
+}
+
 export const deleteCommonFiles = (session) =>
 {
   // session.deleteFile('_writersBlockListPrivate.json')
   // session.deleteFile('_writersBlockListPublic.json')
+  // session.deleteFile('_writersBlockUsersSettings.json')
+  // session.deleteFile('_writersBlockListMap.json')
+  // session.deleteFile('_writersBlockIntegrations.json')
   
-  // session.deleteFile('private/20191001.json')
-  // session.deleteFile('private/20191002.json')
-  // session.deleteFile('private/20191003.json')
-  // session.deleteFile('private/20191004.json')
-  // session.deleteFile('private/20191005.json')
-  // session.deleteFile('private/20191006.json')
-  // session.deleteFile('private/20191007.json')
-  // session.deleteFile('private/20191008.json')
-  // session.deleteFile('private/20191009.json')
-  // session.deleteFile('private/20191010.json')
+  // session.deleteFile('private/20191101.json')
+  // session.deleteFile('private/20191102.json')
+  // session.deleteFile('private/20191103.json')
+  // session.deleteFile('private/20191104.json')
+  // session.deleteFile('private/20191105.json')
+  // session.deleteFile('private/20191106.json')
+  // session.deleteFile('private/20191107.json')
+  // session.deleteFile('private/20191108.json')
+  // session.deleteFile('private/20191109.json')
+  // session.deleteFile('private/20191110.json')
   // session.deleteFile('private/20191011.json')
   // session.deleteFile('private/20191012.json')
   // session.deleteFile('private/20191013.json')
@@ -31,20 +46,23 @@ export const deleteCommonFiles = (session) =>
   // session.deleteFile('private/20191026.json')
   // session.deleteFile('private/20191027.json')
   // session.deleteFile('private/20191028.json')
+  // session.deleteFile('private/20191029.json')
+  // session.deleteFile('private/20191030.json')
+  // session.deleteFile('private/20191031.json')
 }
 
 export const listFiles = (session) =>
 {
   console.log('listing files:')
   let indx=0
-  session.listFiles(itm => { console.log(++indx,': ', itm); return true })
+  session.listFiles(itm => { console.log(`${++indx}: `, itm); return true })
 }
 
-export const readSingle = (session,s) =>
+export const readSingle = (session,s='_writersBlockListPrivate.json',opts={}) =>
 {
   //_writersBlockListPrivate.json
   //private/20191007.json
-  session.getFile(s).then(txt => console.log(s.toUpperCase()+' FILE CONTENTS: ', txt))
+  session.getFile(s, opts).then(txt => console.log(s.toUpperCase()+' FILE CONTENTS: ', txt))
   .catch(err=>console.error(err))
 }
 
@@ -62,7 +80,7 @@ export const makeMultiple = (session,tot,month) =>
   function putFile(i)
   {
     const createdTimestamp = new Date(`${month} ${daysArray[i]} ${new Date().getFullYear()}`).getTime(),
-          fileName = new Date().getContentFileFormattedDate(createdTimestamp)+'.json'
+          fileName = new Date(createdTimestamp).CONTENT_FILE.formatDate()+'.json'
     let   curFileData = fileData+''
           curFileData = curFileData
                           .replace(/MMx/g,month)
@@ -82,13 +100,23 @@ export const makeMultiple = (session,tot,month) =>
       { putFile(i) }
       else
       {
-        privateList = privateList.sort()
-        console.log('privateList',privateList)
-        const saveList = {"privatePosts":privateList}
-        // {"privatePosts":["20191007.json"]}
-        console.log(JSON.stringify(saveList))
-        session.putFile('_writersBlockListPrivate.json',JSON.stringify(saveList),{})
-        .then(o => console.log('_writersBlockListPrivate is PUT: o',o))
+        // privateList = privateList.sort()
+        // console.log('privateList',privateList)
+        // const saveList = {"privatePosts":privateList}
+        // // {"privatePosts":["20191007.json"]}
+        // console.log(JSON.stringify(saveList))
+        // session.putFile('_writersBlockListPrivate.json',JSON.stringify(saveList),{})
+        // .then(o =>
+        // {
+          // console.log('_writersBlockListPrivate is PUT: o',o)
+          const mapList = {}
+          privateList.forEach(itm =>
+            { mapList[itm.replace('.json','')] = {kind:'PRIVATE', url:'/tmp/path'} })
+          console.log('mapList',mapList);
+          session.putFile('_writersBlockListMap.json', JSON.stringify({postsMap:mapList}), { encrypt: false })
+            .then(o => console.log('_writersBlockListMap is PUT: o',o))
+            .catch(err => console.error(err))
+        // })
       }
     })
     .catch(err => console.error(err))

@@ -6,6 +6,7 @@ export type ContextJournalConstantsType =   'writersblock.Journal.JOURNAL_NAVIGA
                                           | 'writersblock.Journal.JOURNAL_SAVE_CONTENT_FAILURE'
                                           | 'writersblock.Journal.JOURNAL_SAVE_CONTENT_INIT'
                                           | 'writersblock.Journal.JOURNAL_SAVE_CONTENT_SUCCESS'
+                                          | 'writersblock.Journal.JOURNAL_SAVE_CONTENT_SUCCESS_UPDATE_USER_FILES'
                                           | 'writersblock.Journal.LOAD_CONTENT_FAILURE'
                                           | 'writersblock.Journal.LOAD_CONTENT_INIT'
                                           | 'writersblock.Journal.LOAD_CONTENT_SUCCESS'

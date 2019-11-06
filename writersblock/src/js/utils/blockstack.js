@@ -1,60 +1,84 @@
+import { version } from '../../../package.json'
 //$FlowCurrentBranch
 const localStorageJSON = JSON.parse(localStorage.getItem("blockstack-session"))
+export const WRITERS_BLOCK_VERSION = version
 export const USE_GAIA = (localStorageJSON && !!localStorageJSON.userData) || false
 
 export const WRITERS_BLOCK_BASE_FILES_ENUM = {
-  'PRIVATE':0,
-  'PUBLIC':1
+  'MAP':0,
+  'USER':1,
+  'INTEGRATIONS':2
 }
 
+export const INTEGRATIONS = {
+  TWO_HUNDRED_WAD:{
+    entries:{
+      _entryid/*from WB*/:{
+        POST:0,//timestamp
+        UPDATED:[],//array of timestamps
+        uuid:0//from 200wad
+      },
+    },
+    mostRecentCommit:0,//now
+    nextEligibleToCommit:0,//1hr after mostRecentCommit
+  }
+}
+
+// NOTE: for ALL base_files, for successsful population, the storeKey MUST === the first key within 'content' 
 export const WRITERS_BLOCK_BASE_FILES = [
   {
-    content: { "privatePosts": [] },
-    name:'_writersBlockListPrivate.json',
-    path:'',
-    pathBucket:'private/',
-    storeKey:'privatePosts',
-    type:'PRIVATE',
-    opts: {}
+    name: '_writersBlockListMap.json',
+    content: { "postsMap": {} },
+    path: '',
+    storeKey: 'postsMap',
+    opts: { decrypt: false, encrypt: false }
   },
   {
-    content: { "publicPosts": [] },
-    name: '_writersBlockListPublic.json',
-    path: '',
-    pathBucket:'public/',
-    storeKey: 'publicPosts',
-    type:'PUBLIC',
-    opts: { decrypt: false, encrypt:false }
+    name:'_writersBlockUsersSettings.json',
+    content: {
+      user:{
+          semver: {
+            mostRecentAcknowledgedVersion: WRITERS_BLOCK_VERSION,
+            changelog:[] // array of files named as semver
+          },
+          settings: {
+            pseudonym:'',
+            publish:'private',
+            pageview:'default',
+          },
+          integrations: {} //for Store>Integration key  mapping
+        }
+    },
+    path:'',
+    pathBucket:'user/',
+    storeKey:'user',
+    type:'USER',
+    opts: {sign:true, verify:true}
+  },
+  {
+    name:'_writersBlockIntegrations.json',
+    content: {INTEGRATIONS},
+    path:'',
+    storeKey:'INTEGRATIONS',
+    opts: {sign:true, verify:true}
   }
 ]
 
-export const createDeeplink = (uSess,type,link) =>
-{
-  const userData = JSON.parse(localStorage.getItem('blockstack-session'))
-  if(type === WRITERS_BLOCK_BASE_FILES_ENUM['PRIVATE'])
-  {
-    console.log('private deeplink', userData)
-    console.log('uSess,type,link',uSess,type,link)
-    const encrypted = uSess.encryptContent(link),
-          urlReadable = btoa(encrypted)
-    console.log('----> encrypted',encrypted)
-    console.log('--> urlReadable',urlReadable)
-
-    const decryptURL = atob(urlReadable)
-    console.log('decryptURL',decryptURL)
-    const decrypt = uSess.decryptContent(decryptURL)
-    console.log('<---- decrypt',decrypt)
-  }
-  else
-  {
-    //console.log('public deeplink')
-    //forthcoming. Will need to encode userData.username &&  userData.profile.name
-  }
+export const WRITERS_BLOCK_BASE_CONST_ENUM = {
+  'PRIVATE':0,
+  'PUBLIC':1
 }
-
-export const parseDeeplink = (uSess,link) =>
-{
-  const decryptURL = atob(link)
-  const decrypt = uSess.decryptContent(decryptURL)
-  return decrypt
-}
+export const WRITERS_BLOCK_BASE_CONST = [
+  {
+    path:'',
+    pathBucket:'private/',
+    type:'PRIVATE',
+    opts: {sign:true, verify:true}
+  },
+  {
+    path: '',
+    pathBucket:'public/',
+    type:'PUBLIC',
+    opts: { decrypt: false, encrypt:false }
+  },
+]

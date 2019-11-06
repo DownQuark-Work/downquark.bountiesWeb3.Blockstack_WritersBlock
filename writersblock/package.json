@@ -1,9 +1,10 @@
 {
   "name": "writersblock",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Daily Journal and Calendar on the Block Chain",
   "main": "index.js",
   "scripts": {
+    "build": "parcel build index.html --out-dir build",
     "cy:o": "cypress open",
     "cy:rec": "cypress run --record --key 1245d772-ce15-434e-b77d-c07769af8bc4",
     "cy:run": "cypress run",
@@ -12,6 +13,7 @@
     "lint": "cross-env NODE_ENV=development eslint --cache --format=pretty .",
     "lint-cln": "rimraf .eslintcache && yarn lint",
     "lint-fix": "yarn --silent lint --cache --fix; exit 0",
+    "manifest-sync": "chmod 777 manifest.json && cp manifest.json dist/manifest.json",
     "postinstall": "yarn flow-typed",
     "start": "parcel index.html --target browser",
     "test": "echo \"Error: no test specified\" && exit 1"

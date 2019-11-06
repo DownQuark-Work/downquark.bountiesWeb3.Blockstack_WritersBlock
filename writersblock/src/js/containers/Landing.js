@@ -18,7 +18,7 @@ const Landing = () =>
     blockstack.redirectToSignIn()
   }
 
-  const classMapRef:RefObjOfArrayStr = useRef({}) //https://reactjs.org/docs/hooks-faq.html#is-there-something-like-instance-variables
+  const classMapRef:RefObjOfArrayStr = useRef({})
 
   const configureClassMap = (ref:HTMLDivElement) =>
   {

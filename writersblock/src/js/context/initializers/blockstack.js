@@ -1,4 +1,6 @@
 // import type { ContextInitializerJournalType } from '../../../flow/context/InitializersType'
+import { version } from '../../../../package.json'
+import { IN_DEVELOPMENT } from '../../utils/testing'
 
 const blockstackContextInitial: $FlowCurrentBranch = {
   appConfig:{},
@@ -19,18 +21,14 @@ const blockstackContextInitial: $FlowCurrentBranch = {
   identityAddress:{},
   appPrivateKey:{},
   coreSessionToken:{},
-  authResponseToken:{},
+  authResponseToken:'',
   hubUrl:{},
   gaiaAssociationToken:{},
   userInformationPopulated:false,
   userFiles:{
-    privatePosts:'',
-    publicPosts:''
-  }
+    postsLoaded: false,
+    postsMap:{},
+  },
+  version,
 }
 export default blockstackContextInitial
-
-
-/*["username", "profile", "email", "decentralizedID", "identityAddress", "appPrivateKey", "coreSessionToken", "authResponseToken", "hubUrl", "gaiaAssociationToken"] */
-/*PROFILE: ["@type", "@context", "api", "name", "description", "account", "image", "apps"] */
-// TODO: [@mlnck] FINISH ~ finish destructuring above for flow

@@ -24,7 +24,7 @@ const WysiwygDrawer = (props:WysiwygControlsDrawerPropsType) =>
     width: 'calc(100% - 10px)',
   })
 
-  console.log('props: WysiwygDrawerComponent',props)
+  // console.dev('journal', 'props: WysiwygDrawerComponent',props)
   return (
     <WysiwygDrawerComponent>
       {props.msg}

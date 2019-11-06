@@ -24,7 +24,7 @@ const WeekRows = (props:WeekRowsPropsType) =>
   {
     const dates = fullCalendarDates.numbered.splice(0,7),
           epochs = fullCalendarDates.epoch.splice(0,7),
-          rowContent = props.content.filter(itm => itm.date >= epochs[0] && itm.date <= epochs[6]+Math.msInDay())
+          rowContent = props.content.filter(itm => itm >= epochs[0] && itm <= epochs[6]+Math.msInDay)
     Weeks.push(<Week key={btoa(i+'')} weekPosition={i} dates={dates} epochs={epochs} content={rowContent} />)
   }
 

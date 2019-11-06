@@ -1,6 +1,6 @@
 import type { ContextWritersBlockType } from '../../flow/context/ReducersType'
 
-import React, { useReducer } from 'react'
+import React, { useDebugValue, useReducer } from 'react'
 import { UserSession, AppConfig } from 'blockstack';
 import { Client as Styletron } from 'styletron-engine-atomic'
 import { Provider as StyletronProvider, DebugEngine } from 'styletron-react'
@@ -20,7 +20,7 @@ export const WritersBlockContext: $FlowES6Bug = React.createContext(initialConte
 
 const Root = () => 
 {
-  const blockstackAppConfig = new AppConfig(['store_write', 'publish_data'])
+  const blockstackAppConfig = new AppConfig(['store_write', 'publish_data', 'email'])
   const blockstackUserSession = new UserSession({ appConfig: blockstackAppConfig })
   //utlize javascripts pointers to capture config and sesson before store is populated and becomes immutable
   //$FlowCurrentBranch

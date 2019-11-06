@@ -1,6 +1,8 @@
 import React, {useContext, useEffect, useRef, useState} from 'react'
 import { styled,withStyle } from 'styletron-react'
 
+import UserSettingsBase from '../usersettings/Base'
+
 import { TabletPlusCorners } from  '../../context/constants/app/journal'
 import { MediaQuery } from  '../../context/constants/app/common'
 
@@ -49,16 +51,15 @@ const Footer = () =>
         }),
         JournalFooterNext = withStyle(JournalFooterPrev, { textAlign:'right' })
 
-const clonedPosts = [...writersBlockStore.Blockstack.userFiles.privatePosts],
-      footerNavData = clonedPosts.sort().filter((itm, indx, arr) => {return arr.indexOf(itm) === indx})
-
+const clonedPosts = writersBlockStore.Blockstack.userFiles.postsMap ? [...Object.keys(writersBlockStore.Blockstack.userFiles.postsMap)] : [],
+      footerNavData = clonedPosts.sort().filter((itm, indx, arr) => arr.indexOf(itm) === indx)
 let [footerPointer, setFooterPointer] = useState(footerNavData.length-1)
 useEffect(()=>
 {
   if(journalStore.currentDayFileExists)
   {
     footerNavData.forEach((itm,indx) => 
-    { if(journalStore.currentDayFileExists === itm){ setFooterPointer(indx); } })
+    { if(journalStore.currentDayFileExists.noExt() === itm){ setFooterPointer(indx); } })
   }
 },[footerNavData, footerPointer, journalStore.currentDayFileExists])
 
@@ -66,19 +67,29 @@ useEffect(()=>
   {
     footerPointer += i
     
-    const entryFile = footerNavData[footerPointer],
+    const entryFile = footerNavData[footerPointer]+'.json',
+          kind = writersBlockStore.Blockstack.userFiles.postsMap[entryFile.noExt()].kind,
           block = { userSession:writersBlockStore.Blockstack.userSession, dispatch:writersBlockDispatch },
-          journal = {dispatch:journalDispatch, currentDayFileExists:entryFile}
+          journal = {dispatch:journalDispatch, currentDayFileExists:entryFile, kind}
+
     navigateJournalContent(block, journal, entryFile)
   }
-  
-  return footerNavData.length > 1 && (
+
+  return (<>
     <JournalFooter>
       <JournalFooterNav>
         {footerPointer > 0 && <JournalFooterPrev onClick={() => navigateContent(-1)}>↤</JournalFooterPrev>}
-        {footerPointer < footerNavData.length - 1 && <JournalFooterNext onClick={() => navigateContent(1)}>↦</JournalFooterNext>}
+        {footerPointer < footerNavData.len && <JournalFooterNext onClick={() => navigateContent(1)}>↦</JournalFooterNext>}
       </JournalFooterNav>
     </JournalFooter>
+    {
+      // true && <UserSettingsBase /> || //auto-open for dev
+      writersBlockStore
+      && writersBlockStore.Landing
+      && writersBlockStore.Landing.settingsOpen &&
+      <UserSettingsBase/>
+    }
+    </>
   )
 }
 Footer.displayName = 'JournalFooter'

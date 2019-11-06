@@ -8,21 +8,32 @@
     <meta name="description" content="A Daily Decentralized Journaling App">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    <meta name="twitter:widgets:autoload" content="off">
+
+    <meta property="og:url" content="http://writersblock.downquark.work" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Writers Block" />
+    <meta property="og:description" content="Writing for nothing but the fun of it. Daily and Decentralized." />
+    <meta property="og:image" content="http://writersblock.downquark.work/writers-block-icon-192x192.png" />
+
     <style>
-      @import url(https://fonts.googleapis.com/css?family=Crimson+Text:400,700,900,400italic,700italic,900italic|Playfair+Display:400,700,900,400italic,700italic,900italic|Rock+Salt:400|Gloria+Hallelujah);
+    @import url(https://fonts.googleapis.com/css?family=Crimson+Text:400,700,900,400italic,700italic,900italic|Playfair+Display:400,700,900,400italic,700italic,900italic|Rock+Salt:400|Gloria+Hallelujah);
       *,
-      :before,
-      :after {
-          box-sizing: border-box;
-      }
-      :focus { outline:none }
-      body {
-          background-color: #1d1f20;
-          color: #e5e5e5;
-          font: 16px/1.25 'Crimson Text', sans-serif;
-          margin: 0;
-      }
-      #root > div > div > div * { position: relative; }
+    before,
+    after {
+        box-sizing: border-box;
+    }
+    :focus { outline:none }
+    body {
+        background-color: #1d1f20;
+        color: #e5e5e5;
+        font: 16px/1.25 'Crimson Text', sans-serif;
+        margin: 0;
+    }
+      #root > div > div > div *:not([class]) { position: relative; }
+    
+    
+      /* iframe[class*="twitter"],.social-button{visibility: hidden !important;} */
     </style>
 </head>
 
@@ -30,12 +41,27 @@
     <!--[if lte IE 9]>
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
         <![endif]-->
+        <!--TWITTER-->
+        <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+        <!-- END TWITTER -->
+        <!-- FACEBOOK -->
+        <script>
+            window.fbAsyncInit = function() {
+                FB.init({
+                    appId: '50365371121',
+                    autoLogAppEvents : true,
+                    xfbml: true,
+                    version : 'v5.0'
+                });
+            };
+        </script>
+<script async defer src="https://connect.facebook.net/en_US/sdk.js"></script>
+        <!-- END FACEBOOK -->
 
     <!-- Writers Block Root Element -->
     <div id="root" />
 
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-149288838-1"></script>
+
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag() {dataLayer.push(arguments);}

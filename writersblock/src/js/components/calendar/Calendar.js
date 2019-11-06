@@ -1,10 +1,11 @@
 import type {FetchCalendarContentCallbackDataType} from '../../../flow/context/ActionsType'
 
-import React, {useEffect, useState} from 'react'
+import React, {useContext, useEffect, useState} from 'react'
 import {styled} from 'styletron-react'
 
+import { WritersBlockContext } from '../../base/Root'
+
 import {api, MediaQuery} from '../../context/constants/app/common'
-import {ActionFetch} from '../../context/actions'
 
 import Loading from '../loading'
 import DayColumns from './decorators/DayColumns'
@@ -13,27 +14,22 @@ import CalendarContentMock from '../../../mocks/calendar'
 
 const Calendar = () =>
 {
-  const calendarUrl = `${api.url.BASE}${api.url.CALENDAR}`,
+  const { writersBlockStore, writersBlockDispatch } = useContext(WritersBlockContext),
         [calendarContent, setCalendarContent] = useState({content:[], loading:true})
-
-  // TODO: PHASE2 - handle calendar saves
-  const receiveFetchedData = <FetchCalendarContentCallbackDataType>(o:FetchCalendarContentCallbackDataType) =>
-  { setCalendarContent({...o}) }
+  
   useEffect(() =>
-  {   //Phase 2 functionality stub
-    ActionFetch({
-      callback:receiveFetchedData,
-      extended:{loading: false},
-      mock:CalendarContentMock,
-      url:calendarUrl,
-    })
-  }, [calendarUrl])
-  {/* //I think turning off the calendar and re-working the 
-  //skeuomorph to include more options is the way to go
-  //for mobile */}
-  const [activeMonth, setActiveMonth] = useState(new Date().getMonth())
-  const [activeYear, setActiveYear] = useState(new Date().getYear())
-
+  {
+    if (writersBlockStore.Blockstack.userFiles.postsLoaded && writersBlockStore.Journal.calendar.activeMonth)
+    {
+      const curMonthRegEx = new RegExp(`${new Date(writersBlockStore.Journal.calendar.activeMonth).getFullYear()}${new Date(writersBlockStore.Journal.calendar.activeMonth).getMonth()+1}\\d{2}$`)
+      let   monthlyDates = writersBlockStore.Blockstack.userFiles.postsMap ? [...Object.keys(writersBlockStore.Blockstack.userFiles.postsMap)] : []
+            monthlyDates = monthlyDates.filter(itm => itm.match(curMonthRegEx))
+            monthlyDates = monthlyDates.map(itm => itm.noExt().getDateFromFileName())
+            monthlyDates = [...new Set(monthlyDates)].sort()
+      setCalendarContent({content:monthlyDates,loading:false})
+    }
+  },[writersBlockStore])
+  
   const loadingOpts = {
     backgroundRGBA: 'rgba(255,255,255,.7)',
     charAmtRange:[1,8],
@@ -62,7 +58,7 @@ const Calendar = () =>
   })
 
   return (
-    <CalendarWrapper>
+    <CalendarWrapper data-totalheight>
       { calendarContent.loading && <Loading {...loadingOpts} /> }
       <DayColumns />
       <WeekRows activeDate={new Date()} content={calendarContent.content} />

@@ -39,16 +39,6 @@ const Wysiwyg = (props:WysiwygPropsType) =>
 {
   const {journalStore, journalDispatch} = useContext(JournalContext)
 
-  const [test, setTest] = useState(true)
-  const toggleTest = () =>
-  {
-    console.log('testing',test,'\r\n',Controls);
-    setTest(!test);
-    // journalDispatch({type:'writersblock.Journal.SET_HTML_MODE',payload:true})
-    journalDispatch({type:'writersblock.Journal.SET_HTML_MODE'})
-    console.log('TOGGLE TEST:journalStore',journalStore)
-  }
-
   const defaultFormat:WysiwygDefaultFormatType = {
           displayDrawer: false,
           msg:''
@@ -73,7 +63,6 @@ const Wysiwyg = (props:WysiwygPropsType) =>
         },
     setCustomDrawerComponentFormat = (type: string, openingTag: string, sel: { begin: { element: any, index: number }, end: { element: any, index: number }, txt: { range: number, selectedTxt: string, overwriteText?:string, overwriteClass?:string[]}}) =>
         {
-          // console.log('setCustomDrawerComponentFormat type',type)
           const REPLACE_TAG_CLOSE = 'zx_REPLACE_TAG_CLOSE_xz',
                 REPLACE_TAG_OPEN = 'zx_REPLACE_TAG_OPEN_xz',
                 REPLACE_TAG_SPLIT = 'zx_REPLACE_TAG_SPLIT_xz'
@@ -114,7 +103,6 @@ const Wysiwyg = (props:WysiwygPropsType) =>
             
             //remove all internal instances of tag
             formattedText = formattedText.replace(rmTagRegEx,'')
-            console.log('matchedTags',matchedTags)
             if(matchedTags)
             { //Handle opening and closing within other tags of the same type
               if(matchedTags.length && matchedTags[0].startsWith('</')){ formattedText = matchedTags.shift() + formattedText }
@@ -129,7 +117,12 @@ const Wysiwyg = (props:WysiwygPropsType) =>
 
           //handle special cases
           if (type === 'STRIKETHROUGH')
-          { closingTag = `<${sel.txt.overwriteClass[0]} data-wysiwyg-class-map="strike-replacement" class="${sel.txt.overwriteClass[1]}">${sel.txt.overwriteText}</${sel.txt.overwriteClass[0]}>${closingTag}` }
+          {
+            const strikeReplace = (sel.txt.overwriteClass && sel.txt.overwriteClass[0])
+                                    ? `<${sel.txt.overwriteClass[0]} data-wysiwyg-class-map="strike-replacement" class="${sel.txt.overwriteClass[1]}">${sel.txt.overwriteText}</${sel.txt.overwriteClass[0]}>`
+                                    : ''
+            closingTag = `${strikeReplace}${closingTag}`
+          }
 
           //$FlowNonIssue [innerHTML is valid]
           document.querySelector('.journal-daily-content').innerHTML = 
@@ -159,7 +152,6 @@ const Wysiwyg = (props:WysiwygPropsType) =>
   return (
     <WysiwygControls>
       {curFormat.displayDrawer && <Controls.Drawer msg={curFormat.msg} customDrawerComponent={curFormat.customDrawerComponent} setCustomDrawerComponentFormat={setCustomDrawerComponentFormat}  classMap={props.classMaps.current} />}
-      {/* <button type='button' onClick={toggleTest}>WYSIWYG</button> */}
       {!!document.queryCommandSupported('removeFormat') && <Controls.Clear {...commonControlProps} />}
         <WysiwygSpacerDiv />
       {!!document.queryCommandSupported('copy') && <Controls.Copy {...commonControlProps} />}

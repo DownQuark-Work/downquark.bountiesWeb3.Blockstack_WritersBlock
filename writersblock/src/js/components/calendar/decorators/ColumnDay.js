@@ -12,7 +12,6 @@ const ColumnDay = (props:ColumnDayPropsType) =>
       width: '100%',
   })
 
-  // console.log('getNamedDay:', new Date().getNamedDay(new Date().getDay(),1))
   return <CalendarDecoratorColumnDay>{props.day}</CalendarDecoratorColumnDay>
 }
 ColumnDay.displayName = 'CalendarDecoratorColumnDay'

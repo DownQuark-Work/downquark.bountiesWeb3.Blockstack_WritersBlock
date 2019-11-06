@@ -16,17 +16,17 @@ import {loadJournalContent} from './context/actions'
 import JournalPageLeft from './PageLeft'
 import JournalPageRight from './PageRight'
 
-import {landingPageContent, loggedInDefaultContent} from './context/index'
+import { landingPageContent, landingPageTitle, loadingPageContent, loadingPageTitle, loggedInDefaultContent, loggedInDefaultTitle} from './context/index'
 
 const Article = (props:JournalBasePropsType) =>
 {
   const { writersBlockStore, writersBlockDispatch } = useContext(WritersBlockContext),
-        {journalStore, journalDispatch} = useContext(JournalContext)
+        {journalStore, journalDispatch} = useContext(JournalContext),
+        [userStage, setUserStage] = useState(USE_GAIA ? 'DEFAULT_LOGGED_IN' : 'LOGGED_OUT')
+        
+  console.dev('journal', 'journalStore', journalStore)
 
   const JournalArticle = styled('article', {
-        //Below is FPO so I don't forget it exists. (makes graph paper)
-            // backgroundSize: '20px 20px',
-            // backgroundImage: 'linear-gradient(to right, #99CFE0 1px, transparent 1px), linear-gradient(to bottom, #99CFE0 1px, #f8f8f8 1px)',
           [MediaQuery.TABLET_PLUS]: {
             columnCount: props.wysiwygDisplayed ? 'unset' : 2,
             columnGap: '6em',
@@ -37,72 +37,91 @@ const Article = (props:JournalBasePropsType) =>
             zIndex: '1'
           }
         })
-
-  const createContentFromUserSettings = () =>
+  const defaultTitle = `${new Date().TITLE.formatDate()} Journal Entry`,
+  createContentFromUserStage = () =>
   {
-    if (!USE_GAIA) //User NOT logged in
-    { 
-      return {
-        ...baseDefaultContentObj,
-        content:landingPageContent,
-        title: 'why writers block?'
-      }
-    }
-    const defaultJournalContentSetting = 'instructions',
-          // defaultJournalContentSetting = context.user.journal.default
-          defaultTitle = `${new Date().getTitleFormattedDate()} Journal Entry`,
+    const defaultJournalContentSetting = writersBlockStore.User.settings.pageview,
           baseDefaultContentObj = {
             created_by:'WritersBlock',
             created_on:new Date().getTime(),
             id:'0',
             title:defaultTitle
           }
-
-    switch(defaultJournalContentSetting)
+    if(journalStore.isDeepLink === true && journalStore.loaded === true)
+    { return journalStore.original } //deeplinked file - parsing completed - no need to wait
+    
+    if (userStage === 'LOGGED_OUT')
     {
-      case 'instructions':
-      case 'blank':
-      case 'previousEntry':
-      case 'markov':
-      default:
-        return {
-          ...baseDefaultContentObj,
-          content:loggedInDefaultContent
-          }
-    }
-  }
-
-  useEffect(() =>
-  {
-    if(!USE_GAIA)
-    { journalStore.original = {...journalStore.landing} }
-    else
-    {
-      if(journalStore.currentDayFileExists === false)
-      {
-        const defaultData = createContentFromUserSettings()
-        journalStore.default = {...defaultData}
-        journalStore.original = {...defaultData}
+      return {
+        ...baseDefaultContentObj,
+        content: landingPageContent,
+        title: landingPageTitle
       }
     }
-  },[journalStore.currentDayFileExists, journalStore.default, journalStore.landing, journalStore.original])
+    
+    const loadingObj = {
+      ...baseDefaultContentObj,
+      content: loadingPageContent,
+      title: loadingPageTitle
+    }
+    if (!writersBlockStore.Blockstack.userFiles.postsLoaded) // loading user information
+    { return loadingObj }
+
+    if(!journalStore.currentDayFileExists)
+    { // show default until we make an entry on this date
+      switch (defaultJournalContentSetting)
+      {
+        case 'blank':
+          return {
+            ...baseDefaultContentObj,
+            content: '',
+            title: `${new Date().TITLE.formatDate()} Journal Entry`
+          }
+        case 'instructions':
+        case 'previousEntry':
+        case 'markov':
+        default:
+          return {
+            ...baseDefaultContentObj,
+            content: loggedInDefaultContent,
+            title: loggedInDefaultTitle
+          }
+      }
+    }
+
+    //entry exists and is available in store. Wait for the load to finish before changing message
+    return journalStore.loaded ? { ...journalStore.original } : loadingObj
+  }
+
+  const journalContentObj = createContentFromUserStage()
+  if (props.wysiwygDisplayed)
+  {
+    journalContentObj.title = defaultTitle
+    journalStore.original.title = defaultTitle //directly to avoid lifecycle
+  }
+  const [journalContent, setJournalContent] = useState(journalContentObj)
+
 
   useEffect(() =>
   {
-    if (!journalStore.loaded)
+    if (!journalStore.loaded && journalStore.currentDayFileExists)
     {
       const block = { userSession:writersBlockStore.Blockstack.userSession },
-            journal = {currentDayFileExists:journalStore.currentDayFileExists, dispatch:journalDispatch, filename:journalStore.fileName.current}
-      if(journalStore.currentDayFileExists != null) // base private and public files have been parsed
-      {loadJournalContent(block,journal)}
+            journal = {
+              currentDayFileExists:journalStore.currentDayFileExists,
+              dispatch:journalDispatch,
+              filename:journalStore.fileName.current,
+              kind:writersBlockStore.Blockstack.userFiles.postsMap[journalStore.currentDayFileExists.noExt()].kind
+            }
+      loadJournalContent(block,journal)
     }
-  }, [journalStore.loaded, journalStore.currentDayFileExists, journalStore.fileName, writersBlockStore.Blockstack.userSession, journalDispatch])
+  }, [journalDispatch, journalStore.currentDayFileExists, journalStore.fileName, journalStore.loaded, writersBlockStore.Blockstack.userFiles.postsMap, writersBlockStore.Blockstack.userSession])
 
   return (
     <JournalArticle>
-      <JournalPageLeft title={journalStore.original.title} {...props} />
+      <JournalPageLeft title={journalContent.title} {...props} />
       <JournalPageRight
-        content={journalStore.updatedContent || USE_GAIA && journalStore.original.content || journalStore.landing.content}
+        content={journalContent.content}
         {...props}
       />
     </JournalArticle>

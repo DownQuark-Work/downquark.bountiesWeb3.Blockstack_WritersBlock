@@ -13,7 +13,8 @@ export const JOURNAL_PRE_FOCUS_TEXT:ContextJournalConstantsType = 'writersblock.
 export const JOURNAL_REDO_ACTIVE:ContextJournalConstantsType = 'writersblock.Journal.SET_REDO_ACTIVE'
 export const JOURNAL_SAVE_CONTENT_FAILURE:ContextJournalConstantsType = 'writersblock.Journal.JOURNAL_SAVE_CONTENT_FAILURE'
 export const JOURNAL_SAVE_CONTENT_INIT:ContextJournalConstantsType = 'writersblock.Journal.JOURNAL_SAVE_CONTENT_INIT'
-export const JOURNAL_SAVE_CONTENT_SUCCESS:ContextJournalConstantsType = 'writersblock.Journal.JOURNAL_SAVE_CONTENT_SUCCESS'
+export const JOURNAL_SAVE_CONTENT_SUCCESS: ContextJournalConstantsType = 'writersblock.Journal.JOURNAL_SAVE_CONTENT_SUCCESS'
+export const JJOURNAL_SAVE_CONTENT_SUCCESS_UPDATE_USER_FILES:ContextJournalConstantsType = 'writersblock.Journal.JJOURNAL_SAVE_CONTENT_SUCCESS_UPDATE_USER_FILES'
 export const JOURNAL_UNSAVED_UPDATE:ContextJournalConstantsType = 'writersblock.Journal.SET_UNSAVED_UPDATE'
 
 export const WysiwygConstantsEnum = { 'bold':1,

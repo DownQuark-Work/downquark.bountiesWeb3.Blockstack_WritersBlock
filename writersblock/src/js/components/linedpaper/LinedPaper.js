@@ -9,10 +9,7 @@ const Content = (props:Props) =>
   const [notes, setNotes] = useState(props.children)
   const handleBlur = (e) =>
   {
-    console.log('====================================');
-    console.log('Handling Blur');
-    console.log('e',e)
-    console.log('====================================');
+    // TODO: [@mlnck] UPDATE ~ Handle Blur
   }
   const getNotesParagraphs = () =>
   {

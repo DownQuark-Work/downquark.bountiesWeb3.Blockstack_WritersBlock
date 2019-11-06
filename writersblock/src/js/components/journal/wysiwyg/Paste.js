@@ -9,9 +9,7 @@ import {WysiwygConstantsEnum, WysiwygConstantsKey} from '../context/constants'
 
 const Paste = (props:WysiwygDecoratorCommonPropsType) =>
 {
-  // console.log('====================================')
-  // console.log('paste should replace copy button when copy pressed and info on clipboard')
-  // console.log('====================================')
+  // TODO: [@mlnck] UPDATE ~ paste should replace copy button when copy pressed and info on clipboard
   const {commonCss, setDrawerContent, setFormat} = props,
         WysiwygDecoratorPaste = styled('button', {...props.commonCss})
 

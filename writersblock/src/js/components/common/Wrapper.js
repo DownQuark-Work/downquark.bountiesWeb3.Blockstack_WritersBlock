@@ -48,6 +48,7 @@ export const Animated = (props:CommonWrapperAnimatedPropsType) =>
   const CommonWrapperAnimated = styled('div', {
           ...css,
           ...opts,
+          ...animTo,  //prevents reset at end of animation
           animationName: {
             from: {
               ...animFrom

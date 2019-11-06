@@ -33,7 +33,7 @@ const StrikethroughDrawerComponent = (classMap:ObjOfArrayStr, setStrikethroughFo
                               ? 'Optional Override Text'
                               : 'Optional text cannot be added when selection spans multiple elements'
 
-  console.log('selectionRef', selectionRef)
+  console.dev('journal', 'selectionRef', selectionRef)
 
   const StrikethroughSelectionButton = styled('div', {
           backgroundColor:'rgba(185,185,185,.4)',

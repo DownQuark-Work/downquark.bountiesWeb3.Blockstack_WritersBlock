@@ -51,7 +51,7 @@ const Note = (props:PostItPropsType) =>
         })
   const postItPosition = (indx,active) =>
   {
-    console.log('active',active)
+    console.dev('postit', 'active',active)
     const w = parseInt(postItWidth.replace('px','')),
           posNeg = Math.random() > .5 ? 1 : -1
     return {
@@ -65,7 +65,7 @@ const Note = (props:PostItPropsType) =>
   {
     return (
     <PostItNote key={itm.id} style={postItPosition(indx,itm.active)}>
-      <PostItDate>{new Date().getTitleFormattedDate(itm.date)}</PostItDate>
+      <PostItDate>{new Date(itm.date).TITLE.formatDate()}</PostItDate>
       <PostItTitle>{itm.title}</PostItTitle>
       {itm.description && <PostItSeparator>~~~~~~~~~~~~~~</PostItSeparator>}
       {itm.description}

@@ -25,6 +25,18 @@ type FetchJournalContentCallbackType = (FetchJournalContentCallbackDataType) => 
 export type FetchActionPropsType = {
   callback:any,
   // callback:<FetchedData>(FetchedData) => void,
+  opts?:{
+    method?: string, // *GET, POST, PUT, DELETE, etc.
+    mode?: string, // no-cors, *cors, same-origin
+    cache?: string, // *default, no-cache, reload, force-cache, only-if-cached
+    credentials?: string, // include, *same-origin, omit
+    headers?: {
+      'Content-Type'?: string // 'Content-Type': 'application/x-www-form-urlencoded', 'application/json'
+    },
+    redirect?: string, // manual, *follow, error
+    referrer?: string, // no-referrer, *client
+    body?: string //JSON.stringify(data) // body data type must match "Content-Type" header
+  },
   extended?: { [key:string]: any },
   mock?:any, // data to be used in place of a real call
   url:string,

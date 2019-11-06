@@ -92,28 +92,6 @@ const LoadingLine = (props:LoadingLinePropsType):React$Node =>
       setLoadingContent(0)
     }
     return () => clearInterval(interval)
-    
-    ///---------------- THE BELOW WORKS AS AN ACTION BUT IS MORE COMPLICATED THAN THE ORIGINAL---
-    /*
-    let intervalPointer:?IntervalID = null
-    const updateLoadingContent = (ip:?IntervalID, i?:number) =>
-    {
-      if(ip){intervalPointer = ip}
-      console.log('intervalPointer',ip,intervalPointer)
-      const updatedLoadingContent = i || loadingContent + 1
-      setLoadingContent(updatedLoadingContent)
-    }
-    
-    const hasStartedBoolean = loadingContent !== 0
-    ActionTimeIteration({
-      hasStartedBoolean,
-      isActiveBooleans: [loadingContent < charsInPrevLines, (!hasStartedBoolean || hasStartedBoolean && !!intervalPointer)],
-      isActiveCallback: (IID:IntervalID) => {updateLoadingContent(IID)},
-      isNotActiveCallback: () => {updateLoadingContent(null,0)},
-      ms
-    })
-    return () => { console.log('intervalPointerZX',intervalPointer); return clearInterval(intervalPointer)} // clears on unmount
-    */
   }, [charsInPrevLines, loadingContent, ms])
 
   return <>{txt}</>
@@ -151,7 +129,7 @@ const Loading =  (props:LoadingPropsType):React$Node =>
           backgroundColor: props.backgroundRGBA || 'rgba(255,255,255,.7)',
           height:'100%',
           left:0,
-          position:'absolute',
+          position:'fixed',
           top:0,
           zIndex: props.z || 100,
           width:'100%'

@@ -12,7 +12,7 @@ const HighLightDrawerComponent = (classMap:ObjOfArrayStr, setHighlightedFormat:$
   const curSelection = window.getSelection(),
         highlightArray = Object.keys(classMap).filter(itm => !!~itm.indexOf('highlight-'))
 
-// console.log('curSelection',{...curSelection})
+console.dev('journal', 'curSelection',{...curSelection})
 const clonedSelect = curSelection ? {
   begin:{
     element:curSelection.anchorNode,

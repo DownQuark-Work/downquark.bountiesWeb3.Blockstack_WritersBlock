@@ -2,7 +2,8 @@ import React, {useContext, useEffect, useReducer, useRef, useState} from 'react'
 import {styled} from 'styletron-react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-import { USE_GAIA, parseDeeplink } from '../utils/blockstack'
+import { USE_GAIA } from '../utils/blockstack'
+import { handleDeepLink, parseDeepLink } from '../utils/context'
 import { WritersBlockContext } from '../base/Root'
 import {WYSIWYG_SET_VISIBILITY} from '../context/constants/store/journal'
 
@@ -17,74 +18,68 @@ import PostItBase from '../components/postit/Base'
 
 const Journal = ({ match }) =>
 {
-  const deepLink = match && match.params.file,
+  const [journalFilesParsed, setJournalFilesParsed] = useState(0),
+        deepLink = match && match.params.entry,
         paddingStyle = USE_GAIA ? '1rem' : '3rem',
         { writersBlockStore, writersBlockDispatch } = useContext(WritersBlockContext),
         wysiwygDisplayed = USE_GAIA && writersBlockStore && writersBlockStore.Journal.content.showWysiwyg
   
-  JournalContextInitial.fileName.current = new Date().getContentFileFormattedDate() // here instead of _initial_ file so that prototype() can run
+  JournalContextInitial.fileName.current = new Date().CONTENT_FILE.formatDate() // here instead of _initial_ file so that prototype() can run
+  JournalContextInitial.entryData.todaysDate = new Date().CONTENT_FILE.formatDate()
+  JournalContextInitial.entryData.todaysDateFile = new Date().CONTENT_FILE.formatDate()+'.json'
   
+  JournalContextInitial.defaultStorageType = writersBlockStore.User.settings.publish || 'PRIVATE'
   const [journalStore, journalDispatch] = useReducer(JournalReducer, JournalContextInitial),
-        classMapRef:RefObjOfArrayStr = useRef({})
+        classMapRef:RefObjOfArrayStr = useRef({}),
+        contentLoadInit = useRef(false)
   
   let [deeplinkParsed, setDeeplinkParsed] = useState(null)
   useEffect(() =>
   {
-    if(deepLink)
+    if (deepLink)
     {
-      let linkedFile;
-      if(!deepLink.match(/^\d{8}\.\w*$/gm))//external link - try to decode
-      { linkedFile = parseDeeplink(writersBlockStore.Blockstack.userSession,deepLink) }
-      else{ linkedFile = deepLink }
+      if(!deepLink.match(/^\d{8}$/gm))//external "deep" link
+      { writersBlockStore.Journal.shallowlink = null }
+      else{ writersBlockStore.Journal.shallowlink = deepLink+'.json'; } //assume shallow
       
-      if(linkedFile && !!linkedFile.match(/^\d{8}\.\w*$/gm))//external link mounted on internal - attempt to load file path
+      if (writersBlockStore.Journal.shallowlink && writersBlockStore.Blockstack.userFiles.postsLoaded) // handle shallow link
       {
-        //parsed deeplink - but need to verify that it is valid
-        if(writersBlockStore.Blockstack.userFiles.privatePosts.includes(linkedFile))
+        // verify file exists (shallow links are the logged in user's files. Available to them only when logged in)
+        if (writersBlockStore.Blockstack.userFiles.postsMap[writersBlockStore.Journal.shallowlink.noExt()])
         {
           //validated
-          setDeeplinkParsed(linkedFile)
+          journalStore.currentDayFileExists = writersBlockStore.Journal.shallowlink
+          journalStore.isDeepLink = false
+          setJournalFilesParsed(1) // <-- kicks off render when finished validating
         }
-        else if(writersBlockStore.Blockstack.userFiles.publicPosts.includes(linkedFile))
-        { /* Stub for future integration when sharing / viewing other's stories: setDeeplinkParsed('public/'+linkedFile) */ }
         else{ alert('unknown file!'); }
       }
-      else
-      {
-        alert('Link was incorrect. Please try again.')/// TODO: [@mlnck] UPDATE ~ Notification
-      }
+      else { setDeeplinkParsed(parseDeepLink(deepLink)) } // proceed for deep link
     }
-  },[deepLink, writersBlockStore, writersBlockStore.Blockstack.userSession, writersBlockStore.Blockstack.userFiles.privatePosts])
-  //below should be used if deeplink DNE or has failed
-    // should be ignored if deeplink is valid
-  let [journalFilesParsed, setJournalFilesParsed] = useState(0)
+  }, [deepLink, journalStore.currentDayFileExists, journalStore.isDeepLink, writersBlockStore.Blockstack.userFiles.postsLoaded, writersBlockStore.Blockstack.userFiles.postsMap, writersBlockStore.Journal.shallowlink])
+  
   useEffect(()=>
   {
-    if(deepLink || writersBlockStore.Journal.shallowlink)
-    {
-      //parsed deeplink and verified as a valid file
-      if(deeplinkParsed && !writersBlockStore.Journal.shallowlink) // link should no longer have an effect if shallowlink happened
-      {
-        journalStore.currentDayFileExists = deeplinkParsed
-        setJournalFilesParsed(1)
-      }
+    if(deeplinkParsed && !writersBlockStore.Journal.shallowlink && !contentLoadInit.current)
+    {// link should no longer have an effect if shallowlink happened
+        // navigated by deeplink, clicked another entry
+        journalStore.isDeepLink = true
+        contentLoadInit.current = true //only loads 1x
+        handleDeepLink(deeplinkParsed,journalDispatch)
     }
     else
     {
-      // this should ONLY run if no pagination or deepLinking involved OR deeplinking failed
-        //allows full customization of race conditions
-      const privPost = (writersBlockStore.Blockstack.userFiles.privatePosts && writersBlockStore.Blockstack.userFiles.privatePosts[0]) || null,
-            pubPost = (writersBlockStore.Blockstack.userFiles.publicPosts && writersBlockStore.Blockstack.userFiles.publicPosts[0]) || null,
-            effectCurrentDayFileExists = privPost && privPost.noExt() === JournalContextInitial.fileName.current
-                                          || pubPost && pubPost.noExt() === JournalContextInitial.fileName.current
-
-      journalStore.currentDayFileExists = !!effectCurrentDayFileExists ? (privPost || pubPost) : null
-      if(writersBlockStore.Blockstack.userFiles.privatePosts && writersBlockStore.Blockstack.userFiles.publicPosts)
-      { if (!journalStore.currentDayFileExists){ journalStore.currentDayFileExists = false} } //remove null [triggers Article.js line 98]
-      if(journalStore.currentDayFileExists != null && writersBlockStore.Blockstack.userFiles.privatePosts && writersBlockStore.Blockstack.userFiles.publicPosts){setJournalFilesParsed(1)}
+      // this should ONLY run if no shallow or deep linking involved
+        // creates (or loads) today's entry
+      if (writersBlockStore.Blockstack.userFiles.postsMap)
+      {
+        journalStore.currentDayFileExists = writersBlockStore.Blockstack.userFiles.postsMap.hasOwnProperty(JournalContextInitial.fileName.current)
+          ? JournalContextInitial.fileName.current+'.json' : false
+        journalStore.isDeepLink = false
+        setJournalFilesParsed(1) //triggers Article.js to render
+      }
     }
-  },[deepLink, deeplinkParsed, journalStore.currentDayFileExists, writersBlockStore.Blockstack.userFiles.privatePosts, writersBlockStore.Blockstack.userFiles.publicPosts, writersBlockStore.Journal.shallowlink])
-
+  }, [deeplinkParsed, journalStore.currentDayFileExists, journalStore.isDeepLink, writersBlockStore.Blockstack.userFiles.postsMap, writersBlockStore.Journal.shallowlink])
 
   const configureClassMap = (ref:HTMLDivElement) =>
   {

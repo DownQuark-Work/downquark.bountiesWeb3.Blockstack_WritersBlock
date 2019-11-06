@@ -15,8 +15,8 @@ const Week = (props:WeekPropsType) =>
       isActive = (props.weekPosition === 0) ? false : true;
   props.epochs.forEach((itm,indx) =>
   {
-    const dailyContent = props.content.filter(item => item.date >= itm && item.date < itm+Math.msInDay())
-    dateContent[indx] = dailyContent.length ? dailyContent : null
+    const dailyContent = props.content.filter(item => item >= itm && item < itm+Math.msInDay)
+    dateContent[indx+1] = dailyContent.length ? dailyContent : null // need to offset indx by 1 after date handling in  refactor
   })
   
   const weeks = props.dates.map((itm,indx) =>

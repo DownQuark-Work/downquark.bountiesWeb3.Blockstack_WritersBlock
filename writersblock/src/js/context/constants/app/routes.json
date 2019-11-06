@@ -1,6 +1,6 @@
 {
+  "ENTRY": "/entry",
+  "JOURNAL": "/journal",
   "LANDING":"/",
-  "ABOUT": "/about",
-  "JOURNAL": "/journal"
 }
 

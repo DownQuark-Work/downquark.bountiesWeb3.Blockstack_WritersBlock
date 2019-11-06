@@ -13,17 +13,16 @@ export const LandingReducer = (
     {
       case LandingConst.APP_INITIAL_LOAD:
         return { ...landing }
-      case LandingConst.APP_COOKIES_ACCEPTED:
+      case LandingConst.USER_SETTINGS_DISPLAY:
         return {
           ...landing,
-          cookiesAccept: true
+          settingsOpen: true
         }
-      case LandingConst.APP_COOKIES_DECLINED:
-        return { ...landing }
-      case LandingConst.APP_GDPR_ACCEPTED:
-        return { ...landing }
-      case LandingConst.APP_GDPR_DECLINED:
-        return { ...landing }
+      case LandingConst.USER_SETTINGS_CONCEAL:
+        return {
+          ...landing,
+          settingsOpen: false
+        }
       default:
         return landing
     }

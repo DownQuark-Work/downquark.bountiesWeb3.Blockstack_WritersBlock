@@ -46,6 +46,38 @@ export const activeBorder = {
     borderTopWidth: '1px',
   }
 }
+export const cornerBorder = () =>
+{
+  return {
+    background: `linear-gradient(to right, black 4px, transparent 4px) 0 0/20px 20px no-repeat,
+    linear-gradient(to right, black 4px, transparent 4px) 0 100%/20px 20px no-repeat,
+    linear-gradient(to left, black 4px, transparent 4px) 100% 0/20px 20px no-repeat,
+    linear-gradient(to left, black 4px, transparent 4px) 100% 100%/20px 20px no-repeat,
+    linear-gradient(to bottom, black 4px, transparent 4px) 0 0/20px 20px no-repeat,
+    linear-gradient(to bottom, black 4px, transparent 4px) 100% 0/20px 20px no-repeat,
+    linear-gradient(to top, black 4px, transparent 4px) 0 100%/20px 20px no-repeat,
+    linear-gradient(to top, black 4px, transparent 4px) 100% 100%/20px 20px no-repeat`,
+    lineHeight: '40px',
+    margin: '20px'
+  }
+}
+export const dynamicCornerBorder = (props) =>
+{
+  const { borderWidth, color, cornerCoverage, lineHeight, margin, padding } = props
+  return {
+    background: `linear-gradient(to right, ${color} ${borderWidth}, transparent ${borderWidth}) 0 0/${cornerCoverage} ${cornerCoverage} no-repeat,
+    linear-gradient(to right, ${color} ${borderWidth}, transparent ${borderWidth}) 0 100%/${cornerCoverage} ${cornerCoverage} no-repeat,
+    linear-gradient(to left, ${color} ${borderWidth}, transparent ${borderWidth}) 100% 0/${cornerCoverage} ${cornerCoverage} no-repeat,
+    linear-gradient(to left, ${color} ${borderWidth}, transparent ${borderWidth}) 100% 100%/${cornerCoverage} ${cornerCoverage} no-repeat,
+    linear-gradient(to bottom, ${color} ${borderWidth}, transparent ${borderWidth}) 0 0/${cornerCoverage} ${cornerCoverage} no-repeat,
+    linear-gradient(to bottom, ${color} ${borderWidth}, transparent ${borderWidth}) 100% 0/${cornerCoverage} ${cornerCoverage} no-repeat,
+    linear-gradient(to top, ${color} ${borderWidth}, transparent ${borderWidth}) 0 100%/${cornerCoverage} ${cornerCoverage} no-repeat,
+    linear-gradient(to top, ${color} ${borderWidth}, transparent ${borderWidth}) 100% 100%/${cornerCoverage} ${cornerCoverage} no-repeat`,
+    lineHeight,
+    margin,
+    padding
+  }
+}
 
 export const dynamicBorder = () =>
 {

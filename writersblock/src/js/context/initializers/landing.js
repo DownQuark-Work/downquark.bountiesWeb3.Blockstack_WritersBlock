@@ -1,7 +1,6 @@
 import type { ContextInitializerLandingType } from '../../../flow/context/InitializersType'
 
 const landingContextDefault: ContextInitializerLandingType = {
-  cookiesAccept: false,
-  gdprAccept: false,
+  settingsOpen: false
 }
 export default landingContextDefault

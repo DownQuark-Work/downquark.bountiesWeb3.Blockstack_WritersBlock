@@ -9,9 +9,6 @@ import {WysiwygConstantsEnum, WysiwygConstantsKey} from '../context/constants'
 
 const Redo = (props:WysiwygDecoratorCommonPropsType) =>
 {
-  // console.log('====================================')
-  // console.log('Redo should only be activated if available')
-  // console.log('====================================')
   const {commonCss, setDrawerContent, setFormat} = props,
         WysiwygDecoratorRedo = styled('button', {...props.commonCss})
 

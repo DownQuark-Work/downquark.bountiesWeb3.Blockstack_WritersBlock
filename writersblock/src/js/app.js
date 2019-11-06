@@ -6,7 +6,7 @@ import {Prototypes} from './utils/prototypes'
 import Root from './base/Root'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
-// import { fab } from '@fortawesome/free-brands-svg-icons'
+import { faFacebook, faTwitter } from '@fortawesome/free-brands-svg-icons'
 import { faBookmark as faBookmarkEmpty, faCopy as faCopyText, faHeart as faHeartActive } from '@fortawesome/free-regular-svg-icons'
 import {
           faBan,
@@ -58,6 +58,7 @@ faCode,
 faCopyText,
 faCut,
 faEdit,
+faFacebook,
 faFeather,
 faFeatherAlt,
 faFileSignature,
@@ -82,6 +83,7 @@ faSquare,
 faStrikethrough,
 faTag,
 faTags,
+faTwitter,
 faUnderline,
 faUndo,
 faUnlink,
@@ -106,7 +108,7 @@ if (rootElem)
 
 if((module: any).hot && rootElem)
 {
-  (module: any).hot.accept('./base/Root', () =>
+  (module: any).hot.accept(() =>
   {
     // eslint-disable-next-line global-require
     const NextRoot = require('./base/Root').default

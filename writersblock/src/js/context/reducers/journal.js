@@ -29,7 +29,7 @@ export const JournalReducer = (
 
       }
     case JOURNAL_NAVIGATE_ENTRIES_INIT:
-      return {...jrnl, isLoading:true, shallowlink:true}
+      return {...jrnl, isLoading:true, shallowlink:action.payload}
     case JOURNAL_NAVIGATE_ENTRIES_FAILURE:
     case JOURNAL_NAVIGATE_ENTRIES_SUCCESS:
       return {...jrnl, isLoading:false}
